@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.github.mehdishahdoost.api.client"},{"l":"com.github.mehdishahdoost.api.model"},{"l":"com.github.mehdishahdoost.api.query"},{"l":"com.github.mehdishahdoost.api.subscription"}];updateSearchResults();
