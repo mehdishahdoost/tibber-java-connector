@@ -15,16 +15,16 @@ import java.util.List;
 public class TibberSampleApp {
 
     public static void main(String[] args) {
-//        System.out.println("Tibber Java Connector Sample Application");
-//        System.out.println("----------------------------------------");
-//
-//        if (args.length < 1) {
-//            System.out.println("Please provide your Tibber API access token as a command line argument.");
-//            System.out.println("Usage: java -jar tibber-java-connector-sample.jar YOUR_ACCESS_TOKEN");
-//            return;
-//        }
+        System.out.println("Tibber Java Connector Sample Application");
+        System.out.println("----------------------------------------");
 
-        String accessToken = "i4Iv0oah7CLQeC8Rxvr1YXDzDZWjj5gKrZI1kD7YNWY";
+        if (args.length < 1) {
+            System.out.println("Please provide your Tibber API access token as a command line argument.");
+            System.out.println("Usage: java -jar tibber-java-connector-sample.jar YOUR_ACCESS_TOKEN");
+            return;
+        }
+
+        String accessToken = args[0];
         
         try {
             // Create a client with the access token
