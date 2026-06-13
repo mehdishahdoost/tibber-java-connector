@@ -20,34 +20,38 @@ import java.util.concurrent.TimeUnit;
  * <a href="https://developer.tibber.com/docs/guides/calling-api">Tibber API Documentation</a>
  */
 public class LiveMeasurementSubscription {
-    private static final String SUBSCRIPTION_ENDPOINT = "wss://api.tibber.com/v1-beta/gql/subscriptions";
     private static final String SUBSCRIPTION_QUERY = "subscription {\n" +
             "  liveMeasurement(homeId: \"%s\") {\n" +
-            "    timestamp\n" +
-            "    power\n" +
-            "    lastMeterConsumption\n" +
             "    accumulatedConsumption\n" +
-            "    accumulatedProduction\n" +
+            "    accumulatedConsumptionLastHour\n" +
             "    accumulatedCost\n" +
+            "    accumulatedProduction\n" +
+            "    accumulatedProductionLastHour\n" +
             "    accumulatedReward\n" +
-            "    currency\n" +
-            "    minPower\n" +
             "    averagePower\n" +
+            "    currency\n" +
+            "    currentL1\n" +
+            "    currentL2\n" +
+            "    currentL3\n" +
+            "    lastMeterConsumption\n" +
+            "    lastMeterProduction\n" +
             "    maxPower\n" +
-            "    powerProduction\n" +
+            "    minPower\n" +
+            "    power\n" +
             "    powerFactor\n" +
+            "    powerProduction\n" +
+            "    powerReactive\n" +
+            "    signalStrength\n" +
+            "    timestamp\n" +
             "    voltagePhase1\n" +
             "    voltagePhase2\n" +
             "    voltagePhase3\n" +
-            "    currentPhase1\n" +
-            "    currentPhase2\n" +
-            "    currentPhase3\n" +
-            "    signalStrength\n" +
             "  }\n" +
             "}";
 
     private final OkHttpClient httpClient;
     private final ObjectMapper objectMapper;
+    private final String subscriptionUrl;
     private final String accessToken;
     private final String homeId;
     private final SubscriptionHandler handler;
@@ -59,28 +63,31 @@ public class LiveMeasurementSubscription {
     /**
      * Creates a new live measurement subscription for the specified home.
      *
-     * @param accessToken the Tibber API access token
-     * @param homeId      the ID of the home to subscribe to
-     * @param handler     the handler for subscription events
+     * @param subscriptionUrl the WebSocket subscription URL (from viewer.websocketSubscriptionUrl)
+     * @param accessToken     the Tibber API access token
+     * @param homeId          the ID of the home to subscribe to
+     * @param handler         the handler for subscription events
      */
-    public LiveMeasurementSubscription(String accessToken, String homeId, SubscriptionHandler handler) {
-        this(accessToken, homeId, handler, new OkHttpClient.Builder()
+    public LiveMeasurementSubscription(String subscriptionUrl, String accessToken, String homeId, SubscriptionHandler handler) {
+        this(subscriptionUrl, accessToken, homeId, handler, new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(0, TimeUnit.SECONDS) // No timeout for WebSocket connections
+                .readTimeout(0, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
-                .pingInterval(30, TimeUnit.SECONDS) // Keep connection alive
+                .pingInterval(30, TimeUnit.SECONDS)
                 .build());
     }
 
     /**
      * Creates a new live measurement subscription with a custom HTTP client.
      *
-     * @param accessToken the Tibber API access token
-     * @param homeId      the ID of the home to subscribe to
-     * @param handler     the handler for subscription events
-     * @param httpClient  the HTTP client to use for the WebSocket connection
+     * @param subscriptionUrl the WebSocket subscription URL (from viewer.websocketSubscriptionUrl)
+     * @param accessToken     the Tibber API access token
+     * @param homeId          the ID of the home to subscribe to
+     * @param handler         the handler for subscription events
+     * @param httpClient      the HTTP client to use for the WebSocket connection
      */
-    public LiveMeasurementSubscription(String accessToken, String homeId, SubscriptionHandler handler, OkHttpClient httpClient) {
+    public LiveMeasurementSubscription(String subscriptionUrl, String accessToken, String homeId, SubscriptionHandler handler, OkHttpClient httpClient) {
+        this.subscriptionUrl = Objects.requireNonNull(subscriptionUrl, "Subscription URL must not be null");
         this.accessToken = Objects.requireNonNull(accessToken, "Access token must not be null");
         this.homeId = Objects.requireNonNull(homeId, "Home ID must not be null");
         this.handler = Objects.requireNonNull(handler, "Handler must not be null");
@@ -102,19 +109,17 @@ public class LiveMeasurementSubscription {
         }
 
         Request request = new Request.Builder()
-                .url(SUBSCRIPTION_ENDPOINT)
-                .header("Authorization", "Bearer " + accessToken)
-                .header("Sec-WebSocket-Protocol", "graphql-ws")
+                .url(subscriptionUrl)
+                .header("Sec-WebSocket-Protocol", "graphql-transport-ws")
                 .build();
 
         webSocket = httpClient.newWebSocket(request, new WebSocketListener() {
             @Override
             public void onOpen(WebSocket webSocket, Response response) {
-                // Send connection initialization message
                 try {
                     String initMessage = objectMapper.writeValueAsString(Map.of(
                             "type", "connection_init",
-                            "payload", Map.of()
+                            "payload", Map.of("token", accessToken)
                     ));
                     webSocket.send(initMessage);
                 } catch (IOException e) {
@@ -130,10 +135,9 @@ public class LiveMeasurementSubscription {
 
                     switch (type) {
                         case "connection_ack":
-                            // Connection acknowledged, send subscription request
                             String subscriptionMessage = objectMapper.writeValueAsString(Map.of(
                                     "id", subscriptionId,
-                                    "type", "start",
+                                    "type", "subscribe",
                                     "payload", Map.of(
                                             "query", String.format(SUBSCRIPTION_QUERY, homeId),
                                             "variables", Map.of()
@@ -142,8 +146,7 @@ public class LiveMeasurementSubscription {
                             webSocket.send(subscriptionMessage);
                             break;
 
-                        case "data":
-                            // Process subscription data
+                        case "next":
                             if (message.has("payload") && 
                                 message.get("payload").has("data") && 
                                 message.get("payload").get("data").has("liveMeasurement")) {
@@ -152,10 +155,6 @@ public class LiveMeasurementSubscription {
                                 LiveMeasurement measurement = objectMapper.treeToValue(liveMeasurementNode, LiveMeasurement.class);
                                 handler.onMeasurement(measurement);
                             }
-                            break;
-
-                        case "complete":
-                            // Subscription completed
                             if (!connected) {
                                 connected = true;
                                 handler.onConnected();
@@ -163,17 +162,17 @@ public class LiveMeasurementSubscription {
                             break;
 
                         case "error":
-                            // Subscription error
                             String errorMessage = message.has("payload") ? message.get("payload").toString() : "Unknown error";
                             handler.onError(new IOException("Subscription error: " + errorMessage));
                             break;
 
+                        case "complete":
+                            break;
+
                         case "ka":
-                            // Keep alive message, ignore
                             break;
 
                         default:
-                            // Unknown message type
                             handler.onError(new IOException("Unknown message type: " + type));
                             break;
                     }
@@ -209,14 +208,12 @@ public class LiveMeasurementSubscription {
     public void stop() {
         if (webSocket != null) {
             try {
-                // Send stop message
                 String stopMessage = objectMapper.writeValueAsString(Map.of(
                         "id", subscriptionId,
-                        "type", "stop"
+                        "type", "unsubscribe"
                 ));
                 webSocket.send(stopMessage);
                 
-                // Close WebSocket with normal closure status
                 webSocket.close(1000, "Subscription stopped by client");
                 webSocket = null;
                 connected = false;

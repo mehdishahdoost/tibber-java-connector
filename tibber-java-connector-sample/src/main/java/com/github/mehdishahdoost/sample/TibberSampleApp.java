@@ -38,7 +38,7 @@ public class TibberSampleApp {
             System.out.println("\nUser Information:");
             System.out.println("----------------");
             System.out.println("Name: " + user.getName());
-            System.out.println("Email: " + user.getEmail());
+            System.out.println("Account Type: " + user.getAccountType());
             
             // Display homes
             System.out.println("\nHomes:");
