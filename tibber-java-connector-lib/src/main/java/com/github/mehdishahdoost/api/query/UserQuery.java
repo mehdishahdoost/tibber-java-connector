@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mehdishahdoost.api.client.TibberApiClient;
 import com.github.mehdishahdoost.api.model.User;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -17,14 +18,12 @@ import java.util.Collections;
 public class UserQuery {
     private static final String QUERY = "{\n" +
             "  viewer {\n" +
-            "    userId: id\n" +
+            "    userId\n" +
             "    name\n" +
-            "    firstName\n" +
-            "    lastName\n" +
             "    accountType\n" +
-            "    email\n" +
+            "    websocketSubscriptionUrl\n" +
             "    homes {\n" +
-            "      homeId: id\n" +
+            "      id\n" +
             "      timeZone\n" +
             "      address {\n" +
             "        address1\n" +
@@ -46,7 +45,7 @@ public class UserQuery {
             "        vatType\n" +
             "      }\n" +
             "      currentSubscription {\n" +
-            "        subscriptionId: id\n" +
+            "        id\n" +
             "        status\n" +
             "        priceInfo {\n" +
             "          current {\n" +
@@ -93,6 +92,8 @@ public class UserQuery {
     public UserQuery(TibberApiClient client) {
         this.client = client;
         this.objectMapper = new ObjectMapper();
+        this.objectMapper.registerModule(new JavaTimeModule());
+        this.objectMapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
     }
 
     /**

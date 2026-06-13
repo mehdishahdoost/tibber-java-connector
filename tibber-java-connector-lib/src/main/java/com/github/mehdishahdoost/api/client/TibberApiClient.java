@@ -99,17 +99,14 @@ public class TibberApiClient {
 
     /**
      * Creates a subscription for real-time measurement data for the specified home.
-     * <p>
-     * This method establishes a WebSocket connection to the Tibber API and
-     * subscribes to real-time measurement data for the specified home. The handler
-     * will be notified of connection status changes and incoming measurement data.
      *
-     * @param homeId  the ID of the home to subscribe to
-     * @param handler the handler for subscription events
+     * @param subscriptionUrl the WebSocket subscription URL (from viewer.websocketSubscriptionUrl)
+     * @param homeId          the ID of the home to subscribe to
+     * @param handler         the handler for subscription events
      * @return a subscription object that can be used to manage the subscription
      */
-    public LiveMeasurementSubscription subscribeToLiveMeasurements(String homeId, SubscriptionHandler handler) {
-        LiveMeasurementSubscription subscription = new LiveMeasurementSubscription(accessToken, homeId, handler, httpClient);
+    public LiveMeasurementSubscription subscribeToLiveMeasurements(String subscriptionUrl, String homeId, SubscriptionHandler handler) {
+        LiveMeasurementSubscription subscription = new LiveMeasurementSubscription(subscriptionUrl, accessToken, homeId, handler, httpClient);
         subscription.start();
         return subscription;
     }

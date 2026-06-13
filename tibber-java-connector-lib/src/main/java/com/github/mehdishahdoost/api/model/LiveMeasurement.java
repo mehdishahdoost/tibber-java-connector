@@ -16,8 +16,11 @@ public class LiveMeasurement {
     private ZonedDateTime timestamp;
     private Double power;
     private Double lastMeterConsumption;
+    private Double lastMeterProduction;
     private Double accumulatedConsumption;
+    private Double accumulatedConsumptionLastHour;
     private Double accumulatedProduction;
+    private Double accumulatedProductionLastHour;
     private Double accumulatedCost;
     private Double accumulatedReward;
     private String currency;
@@ -26,12 +29,13 @@ public class LiveMeasurement {
     private Double maxPower;
     private Double powerProduction;
     private Double powerFactor;
+    private Double powerReactive;
     private Double voltagePhase1;
     private Double voltagePhase2;
     private Double voltagePhase3;
-    private Double currentPhase1;
-    private Double currentPhase2;
-    private Double currentPhase3;
+    private Double currentL1;
+    private Double currentL2;
+    private Double currentL3;
     private Double signalStrength;
 
     /**
@@ -88,11 +92,14 @@ public class LiveMeasurement {
         this.lastMeterConsumption = lastMeterConsumption;
     }
 
-    /**
-     * Returns the accumulated consumption in kWh.
-     *
-     * @return the accumulated consumption
-     */
+    public Double getLastMeterProduction() {
+        return lastMeterProduction;
+    }
+
+    public void setLastMeterProduction(Double lastMeterProduction) {
+        this.lastMeterProduction = lastMeterProduction;
+    }
+
     public Double getAccumulatedConsumption() {
         return accumulatedConsumption;
     }
@@ -106,11 +113,14 @@ public class LiveMeasurement {
         this.accumulatedConsumption = accumulatedConsumption;
     }
 
-    /**
-     * Returns the accumulated production in kWh.
-     *
-     * @return the accumulated production
-     */
+    public Double getAccumulatedConsumptionLastHour() {
+        return accumulatedConsumptionLastHour;
+    }
+
+    public void setAccumulatedConsumptionLastHour(Double accumulatedConsumptionLastHour) {
+        this.accumulatedConsumptionLastHour = accumulatedConsumptionLastHour;
+    }
+
     public Double getAccumulatedProduction() {
         return accumulatedProduction;
     }
@@ -124,11 +134,14 @@ public class LiveMeasurement {
         this.accumulatedProduction = accumulatedProduction;
     }
 
-    /**
-     * Returns the accumulated cost.
-     *
-     * @return the accumulated cost
-     */
+    public Double getAccumulatedProductionLastHour() {
+        return accumulatedProductionLastHour;
+    }
+
+    public void setAccumulatedProductionLastHour(Double accumulatedProductionLastHour) {
+        this.accumulatedProductionLastHour = accumulatedProductionLastHour;
+    }
+
     public Double getAccumulatedCost() {
         return accumulatedCost;
     }
@@ -268,11 +281,14 @@ public class LiveMeasurement {
         this.powerFactor = powerFactor;
     }
 
-    /**
-     * Returns the voltage of phase 1 in volts.
-     *
-     * @return the voltage of phase 1
-     */
+    public Double getPowerReactive() {
+        return powerReactive;
+    }
+
+    public void setPowerReactive(Double powerReactive) {
+        this.powerReactive = powerReactive;
+    }
+
     public Double getVoltagePhase1() {
         return voltagePhase1;
     }
@@ -322,65 +338,30 @@ public class LiveMeasurement {
         this.voltagePhase3 = voltagePhase3;
     }
 
-    /**
-     * Returns the current of phase 1 in amperes.
-     *
-     * @return the current of phase 1
-     */
-    public Double getCurrentPhase1() {
-        return currentPhase1;
+    public Double getCurrentL1() {
+        return currentL1;
     }
 
-    /**
-     * Sets the current of phase 1 in amperes.
-     *
-     * @param currentPhase1 the current of phase 1
-     */
-    public void setCurrentPhase1(Double currentPhase1) {
-        this.currentPhase1 = currentPhase1;
+    public void setCurrentL1(Double currentL1) {
+        this.currentL1 = currentL1;
     }
 
-    /**
-     * Returns the current of phase 2 in amperes.
-     *
-     * @return the current of phase 2
-     */
-    public Double getCurrentPhase2() {
-        return currentPhase2;
+    public Double getCurrentL2() {
+        return currentL2;
     }
 
-    /**
-     * Sets the current of phase 2 in amperes.
-     *
-     * @param currentPhase2 the current of phase 2
-     */
-    public void setCurrentPhase2(Double currentPhase2) {
-        this.currentPhase2 = currentPhase2;
+    public void setCurrentL2(Double currentL2) {
+        this.currentL2 = currentL2;
     }
 
-    /**
-     * Returns the current of phase 3 in amperes.
-     *
-     * @return the current of phase 3
-     */
-    public Double getCurrentPhase3() {
-        return currentPhase3;
+    public Double getCurrentL3() {
+        return currentL3;
     }
 
-    /**
-     * Sets the current of phase 3 in amperes.
-     *
-     * @param currentPhase3 the current of phase 3
-     */
-    public void setCurrentPhase3(Double currentPhase3) {
-        this.currentPhase3 = currentPhase3;
+    public void setCurrentL3(Double currentL3) {
+        this.currentL3 = currentL3;
     }
 
-    /**
-     * Returns the signal strength in percentage.
-     *
-     * @return the signal strength
-     */
     public Double getSignalStrength() {
         return signalStrength;
     }

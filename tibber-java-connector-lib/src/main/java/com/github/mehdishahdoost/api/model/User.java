@@ -1,7 +1,6 @@
 package com.github.mehdishahdoost.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -15,10 +14,8 @@ import java.util.List;
 public class User {
     private String userId;
     private String name;
-    private String firstName;
-    private String lastName;
-    private String accountType;
-    private String email;
+    private List<String> accountType;
+    private String websocketSubscriptionUrl;
     private List<Home> homes;
 
     /**
@@ -26,7 +23,6 @@ public class User {
      *
      * @return the user ID
      */
-    @JsonProperty("id")
     public String getUserId() {
         return userId;
     }
@@ -36,7 +32,6 @@ public class User {
      *
      * @param userId the user ID
      */
-    @JsonProperty("id")
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -59,76 +54,25 @@ public class User {
         this.name = name;
     }
 
-    /**
-     * Returns the first name of the user.
-     *
-     * @return the user's first name
-     */
-    public String getFirstName() {
-        return firstName;
-    }
-
-    /**
-     * Sets the first name of the user.
-     *
-     * @param firstName the user's first name
-     */
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    /**
-     * Returns the last name of the user.
-     *
-     * @return the user's last name
-     */
-    public String getLastName() {
-        return lastName;
-    }
-
-    /**
-     * Sets the last name of the user.
-     *
-     * @param lastName the user's last name
-     */
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    /**
-     * Returns the account type of the user.
-     *
-     * @return the account type
-     */
-    public String getAccountType() {
+    public List<String> getAccountType() {
         return accountType;
     }
 
-    /**
-     * Sets the account type of the user.
-     *
-     * @param accountType the account type
-     */
-    public void setAccountType(String accountType) {
+    public void setAccountType(List<String> accountType) {
         this.accountType = accountType;
     }
 
-    /**
-     * Returns the email address of the user.
-     *
-     * @return the email address
-     */
-    public String getEmail() {
-        return email;
+    public String getWebsocketSubscriptionUrl() {
+        return websocketSubscriptionUrl;
     }
 
     /**
-     * Sets the email address of the user.
+     * Sets the WebSocket subscription URL for real-time data.
      *
-     * @param email the email address
+     * @param websocketSubscriptionUrl the WebSocket subscription URL
      */
-    public void setEmail(String email) {
-        this.email = email;
+    public void setWebsocketSubscriptionUrl(String websocketSubscriptionUrl) {
+        this.websocketSubscriptionUrl = websocketSubscriptionUrl;
     }
 
     /**
