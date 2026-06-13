@@ -34,11 +34,10 @@ jobs:
         run: mvn clean verify
 
       - name: Deploy to Maven Central
-        run: mvn clean deploy -pl tibber-java-connector-lib
+        run: mvn clean deploy -pl tibber-java-connector-lib -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
