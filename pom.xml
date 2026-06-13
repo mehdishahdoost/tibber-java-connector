@@ -137,7 +137,14 @@
                     <artifactId>maven-gpg-plugin</artifactId>
                     <version>3.0.1</version>
                     <configuration>
-                        <arguments>--batch --pinentry-mode loopback --passphrase ${gpg.passphrase}</arguments>
+                        <passphrase>${gpg.passphrase}</passphrase>
+                        <useAgent>false</useAgent>
+                        <gpgArguments>
+                            <arg>--pinentry-mode</arg>
+                            <arg>loopback</arg>
+                            <arg>--batch</arg>
+                            <arg>--no-tty</arg>
+                        </gpgArguments>
                     </configuration>
                     <executions>
                         <execution>
