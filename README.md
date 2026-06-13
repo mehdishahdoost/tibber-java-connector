@@ -57,7 +57,7 @@ User user = userQuery.execute();
 
 // Access user information
 System.out.println("User: " + user.getName());
-System.out.println("Email: " + user.getEmail());
+System.out.println("Account type: " + user.getAccountType());
 
 // Access homes
 user.getHomes().forEach(home -> {
@@ -221,7 +221,8 @@ SubscriptionHandler handler = new SubscriptionHandler() {
 
 // Subscribe to live measurements for a specific home
 String homeId = "YOUR_HOME_ID"; // Get this from the User object
-LiveMeasurementSubscription subscription = client.subscribeToLiveMeasurements(homeId, handler);
+String subscriptionUrl = user.getWebsocketSubscriptionUrl(); // Get from user info
+LiveMeasurementSubscription subscription = client.subscribeToLiveMeasurements(subscriptionUrl, homeId, handler);
 
 // Later, when you want to stop the subscription
 subscription.stop();
