@@ -23,9 +23,21 @@ jobs:
 
       - name: Import GPG key
         run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          KEY_ID=$(gpg --list-secret-keys --keyid-format=LONG | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2)
+          KEYGRIP=$(gpg --list-keys --with-keygrip --keyid-format=LONG "$KEY_ID" | grep Keygrip | head -1 | awk '{print $3}')
+          echo "KEY_ID=$KEY_ID" >> $GITHUB_ENV
+          echo "KEYGRIP=$KEYGRIP" >> $GITHUB_ENV
+          echo "Imported key: $KEY_ID (keygrip: $KEYGRIP)"
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+      - name: Cache GPG passphrase in agent
+        run: |
+          echo "$GPG_PASSPHRASE" | gpg-connect-agent "PRESET_PASSPHRASE $KEYGRIP -1 $(echo -n "$GPG_PASSPHRASE" | xxd -p)" /bye
+          echo "Passphrase cached in gpg-agent"
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Extract version from tag
         id: version
