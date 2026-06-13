@@ -21,16 +21,11 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
 
-      - name: Configure GPG for non-interactive use
+      - name: Import GPG key
         run: |
-          gpgconf --kill gpg-agent || true
-          mkdir -p ~/.gnupg
-          echo "allow-preset-passphrase" >> ~/.gnupg/gpg-agent.conf
-          gpgconf --launch gpg-agent
           echo "${{ secrets.GPG_PRIVATE_KEY }}" | gpg --batch --import
-          GPG_KEY_ID=$(gpg --list-secret-keys --keyid-format=long | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2)
-          echo "GPG_KEY_ID=$GPG_KEY_ID" >> $GITHUB_ENV
-          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --batch --passphrase-fd 0 --pinentry-mode loopback --change-passphrase "$GPG_KEY_ID" || true
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: Extract version from tag
         id: version
@@ -43,7 +38,7 @@ jobs:
         run: mvn clean verify
 
       - name: Deploy to Maven Central
-        run: mvn clean deploy -pl tibber-java-connector-lib -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+        run: mvn clean deploy -pl tibber-java-connector-lib -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}"
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
