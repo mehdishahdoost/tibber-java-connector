@@ -144,11 +144,10 @@
                                 <goal>sign</goal>
                             </goals>
                             <configuration>
+                                <passphrase>${gpg.passphrase}</passphrase>
                                 <gpgArguments>
                                     <arg>--pinentry-mode</arg>
                                     <arg>loopback</arg>
-                                    <arg>--passphrase</arg>
-                                    <arg>${gpg.passphrase}</arg>
                                 </gpgArguments>
                             </configuration>
                         </execution>

@@ -21,20 +21,21 @@ jobs:
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
 
-      - name: Debug GPG setup
-        run: |
-          echo "GPG_PASSPHRASE length: ${#GPG_PASSPHRASE}"
-          echo "GPG_PASSPHRASE first chars: ${GPG_PASSPHRASE:0:3}..."
-          echo "GPG_PASSPHRASE is set: $([ -n "$GPG_PASSPHRASE" ] && echo yes || echo no)"
-          gpg --list-secret-keys --keyid-format=LONG
-        env:
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
       - name: Import GPG key
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          gpg --list-secret-keys --keyid-format=LONG
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+      - name: Configure GPG for signing
+        run: |
+          mkdir -p ~/.gnupg
+          echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+          gpgconf --kill gpg-agent || true
+          gpg-agent --daemon --allow-loopback-pinentry
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Extract version from tag
         id: version
@@ -47,9 +48,7 @@ jobs:
         run: mvn clean verify
 
       - name: Deploy to Maven Central
-        run: |
-          echo "DEBUG: gpg.passphrase=${GPG_PASSPHRASE:0:3}..."
-          mvn clean deploy -pl tibber-java-connector-lib -Dgpg.passphrase="$GPG_PASSPHRASE" -X 2>&1 | grep -E "(gpg|passphrase|sign|ERROR)" | head -20
+        run: mvn clean deploy -pl tibber-java-connector-lib -Dgpg.passphrase="$GPG_PASSPHRASE"
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
