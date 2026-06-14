@@ -25,8 +25,15 @@ jobs:
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
           gpg --list-secret-keys --keyid-format=LONG
+          KEY_ID=$(gpg --list-secret-keys --keyid-format=LONG | awk '/^sec/{split($2,a,"/"); print a[2]; exit}')
+          echo "KEY_ID=$KEY_ID" >> "$GITHUB_ENV"
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
+      - name: Publish GPG public key to keyservers
+        run: |
+          gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID" || true
+          gpg --keyserver keys.openpgp.org --send-keys "$KEY_ID" || true
 
       - name: Configure GPG for signing
         run: |
