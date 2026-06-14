@@ -43,7 +43,7 @@ jobs:
         run: mvn versions:set -DnewVersion=${{ steps.version.outputs.VERSION }} -DgenerateBackupPoms=false
 
       - name: Build and test
-        run: mvn clean verify
+        run: mvn clean verify -Dgpg.skip=true
 
       - name: Deploy to Maven Central
         run: mvn clean deploy -pl tibber-java-connector-lib -Dgpg.passphrase="$GPG_PASSPHRASE"
