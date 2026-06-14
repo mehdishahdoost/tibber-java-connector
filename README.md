@@ -27,7 +27,7 @@ A Java library for interacting with the [Tibber API](https://developer.tibber.co
 ### Gradle
 
 ```groovy
-implementation 'com.github:tibber-java-connector:0.1.0-SNAPSHOT'
+implementation 'com.github:tibber-java-connector:1.0.0'
 ```
 
 ## Getting Started
