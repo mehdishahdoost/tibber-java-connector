@@ -18,9 +18,9 @@ A Java library for interacting with the [Tibber API](https://developer.tibber.co
 
 ```xml
 <dependency>
-    <groupId>com.github</groupId>
+    <groupId>io.github.mehdishahdoost</groupId>
     <artifactId>tibber-java-connector</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
