@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.mehdishahdoost</groupId>
+    <groupId>io.github.mehdishahdoost</groupId>
     <artifactId>tibber-java-connector-parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -12,6 +12,30 @@
     <name>Tibber Java Connector Parent</name>
     <description>Java library for Tibber APIs based on GraphQL</description>
     <url>https://github.com/mehdishahdoost/tibber-java-connector</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>mehdishahdoost</id>
+            <name>Mehdi Shahdoost</name>
+            <email>mhshdst@gmail.com</email>
+            <url>https://github.com/mehdishahdoost</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/mehdishahdoost/tibber-java-connector.git</connection>
+        <developerConnection>scm:git:git@github.com:mehdishahdoost/tibber-java-connector.git</developerConnection>
+        <url>https://github.com/mehdishahdoost/tibber-java-connector</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>tibber-java-connector-lib</module>
@@ -151,6 +175,30 @@
                         <publishingServerId>central</publishingServerId>
                         <autoPublish>true</autoPublish>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                    <configuration>
+                        <flattenMode>ossrh</flattenMode>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>flatten-clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

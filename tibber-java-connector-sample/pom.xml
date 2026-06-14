@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.mehdishahdoost</groupId>
+        <groupId>io.github.mehdishahdoost</groupId>
         <artifactId>tibber-java-connector-parent</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
@@ -18,7 +18,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.mehdishahdoost</groupId>
+            <groupId>io.github.mehdishahdoost</groupId>
             <artifactId>tibber-java-connector-lib</artifactId>
             <version>${project.version}</version>
         </dependency>
