@@ -19,12 +19,21 @@ public class UserQuery {
     private static final String QUERY = "{\n" +
             "  viewer {\n" +
             "    userId\n" +
+            "    login\n" +
             "    name\n" +
             "    accountType\n" +
             "    websocketSubscriptionUrl\n" +
             "    homes {\n" +
             "      id\n" +
             "      timeZone\n" +
+            "      appNickname\n" +
+            "      appAvatar\n" +
+            "      size\n" +
+            "      type\n" +
+            "      numberOfResidents\n" +
+            "      primaryHeatingSource\n" +
+            "      hasVentilationSystem\n" +
+            "      mainFuseSize\n" +
             "      address {\n" +
             "        address1\n" +
             "        address2\n" +
@@ -43,10 +52,13 @@ public class UserQuery {
             "        productionEan\n" +
             "        energyTaxType\n" +
             "        vatType\n" +
+            "        estimatedAnnualConsumption\n" +
             "      }\n" +
             "      currentSubscription {\n" +
             "        id\n" +
             "        status\n" +
+            "        validFrom\n" +
+            "        validTo\n" +
             "        priceInfo {\n" +
             "          current {\n" +
             "            total\n" +
@@ -74,6 +86,7 @@ public class UserQuery {
             "          }\n" +
             "        }\n" +
             "      }\n" +
+            "      subscriptions { id status validFrom validTo }\n" +
             "      features {\n" +
             "        realTimeConsumptionEnabled\n" +
             "      }\n" +

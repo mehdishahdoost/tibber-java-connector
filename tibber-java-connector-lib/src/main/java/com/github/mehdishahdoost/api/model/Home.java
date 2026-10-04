@@ -19,6 +19,34 @@ public class Home {
     private MeteringPointData meteringPointData;
     private Subscription currentSubscription;
     private Features features;
+    private String appNickname;
+    private String appAvatar;
+    private Integer size;
+    private String type;
+    private Integer numberOfResidents;
+    private String primaryHeatingSource;
+    private Boolean hasVentilationSystem;
+    private Integer mainFuseSize;
+    private List<Subscription> subscriptions;
+
+    public String getAppNickname() { return appNickname; }
+    public void setAppNickname(String value) { this.appNickname = value; }
+    public String getAppAvatar() { return appAvatar; }
+    public void setAppAvatar(String value) { this.appAvatar = value; }
+    public Integer getSize() { return size; }
+    public void setSize(Integer value) { this.size = value; }
+    public String getType() { return type; }
+    public void setType(String value) { this.type = value; }
+    public Integer getNumberOfResidents() { return numberOfResidents; }
+    public void setNumberOfResidents(Integer value) { this.numberOfResidents = value; }
+    public String getPrimaryHeatingSource() { return primaryHeatingSource; }
+    public void setPrimaryHeatingSource(String value) { this.primaryHeatingSource = value; }
+    public Boolean getHasVentilationSystem() { return hasVentilationSystem; }
+    public void setHasVentilationSystem(Boolean value) { this.hasVentilationSystem = value; }
+    public Integer getMainFuseSize() { return mainFuseSize; }
+    public void setMainFuseSize(Integer value) { this.mainFuseSize = value; }
+    public List<Subscription> getSubscriptions() { return subscriptions; }
+    public void setSubscriptions(List<Subscription> value) { this.subscriptions = value; }
 
     /**
      * Returns the unique identifier for the home.
@@ -221,6 +249,7 @@ public class Home {
         private String productionEan;
         private String energyTaxType;
         private String vatType;
+        private Integer estimatedAnnualConsumption;
 
         public String getConsumptionEan() {
             return consumptionEan;
@@ -277,6 +306,9 @@ public class Home {
         public void setVatType(String vatType) {
             this.vatType = vatType;
         }
+
+        public Integer getEstimatedAnnualConsumption() { return estimatedAnnualConsumption; }
+        public void setEstimatedAnnualConsumption(Integer value) { this.estimatedAnnualConsumption = value; }
     }
 
     /**
@@ -286,6 +318,8 @@ public class Home {
     public static class Subscription {
         private String subscriptionId;
         private String status;
+        private String validFrom;
+        private String validTo;
         private PriceInfo priceInfo;
 
         @JsonProperty("id")
@@ -305,6 +339,11 @@ public class Home {
         public void setStatus(String status) {
             this.status = status;
         }
+
+        public String getValidFrom() { return validFrom; }
+        public void setValidFrom(String value) { this.validFrom = value; }
+        public String getValidTo() { return validTo; }
+        public void setValidTo(String value) { this.validTo = value; }
 
         public PriceInfo getPriceInfo() {
             return priceInfo;

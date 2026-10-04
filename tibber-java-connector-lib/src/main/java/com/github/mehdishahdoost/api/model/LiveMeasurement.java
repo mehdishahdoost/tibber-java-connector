@@ -30,6 +30,9 @@ public class LiveMeasurement {
     private Double powerProduction;
     private Double powerFactor;
     private Double powerReactive;
+    private Double powerProductionReactive;
+    private Double minPowerProduction;
+    private Double maxPowerProduction;
     private Double voltagePhase1;
     private Double voltagePhase2;
     private Double voltagePhase3;
@@ -37,6 +40,13 @@ public class LiveMeasurement {
     private Double currentL2;
     private Double currentL3;
     private Double signalStrength;
+
+    public Double getPowerProductionReactive() { return powerProductionReactive; }
+    public void setPowerProductionReactive(Double value) { this.powerProductionReactive = value; }
+    public Double getMinPowerProduction() { return minPowerProduction; }
+    public void setMinPowerProduction(Double value) { this.minPowerProduction = value; }
+    public Double getMaxPowerProduction() { return maxPowerProduction; }
+    public void setMaxPowerProduction(Double value) { this.maxPowerProduction = value; }
 
     /**
      * Returns the timestamp of the measurement.

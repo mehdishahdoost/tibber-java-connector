@@ -20,7 +20,13 @@ public class Consumption {
     private Double consumption;
     private String consumptionUnit;
     private Double cost;
+    private Double totalCost;
+    private Double unitCost;
     private String currency;
+    public Double getTotalCost() { return totalCost; }
+    public void setTotalCost(Double value) { this.totalCost = value; }
+    public Double getUnitCost() { return unitCost; }
+    public void setUnitCost(Double value) { this.unitCost = value; }
 
     /**
      * Returns the start time of the consumption period.

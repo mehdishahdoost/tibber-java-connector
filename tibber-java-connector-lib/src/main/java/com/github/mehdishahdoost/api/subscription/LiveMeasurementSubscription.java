@@ -41,6 +41,9 @@ public class LiveMeasurementSubscription {
             "    powerFactor\n" +
             "    powerProduction\n" +
             "    powerReactive\n" +
+            "    powerProductionReactive\n" +
+            "    minPowerProduction\n" +
+            "    maxPowerProduction\n" +
             "    signalStrength\n" +
             "    timestamp\n" +
             "    voltagePhase1\n" +

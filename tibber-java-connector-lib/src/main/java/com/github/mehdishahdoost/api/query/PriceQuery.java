@@ -27,7 +27,7 @@ public class PriceQuery {
             "  viewer {\n" +
             "    home(id: \"%s\") {\n" +
             "      currentSubscription {\n" +
-            "        priceInfo {\n" +
+            "        priceInfo(resolution: %s) {\n" +
             "          current {\n" +
             "            total\n" +
             "            energy\n" +
@@ -85,7 +85,7 @@ public class PriceQuery {
      * @throws IOException if an error occurs during the API request
      */
     public Price getCurrentPrice(String homeId) throws IOException {
-        JsonNode response = executeQuery(homeId);
+        JsonNode response = executeQuery(homeId, "HOURLY");
         JsonNode priceInfo = getPriceInfoNode(response, homeId);
 
         if (!priceInfo.has("current")) {
@@ -103,7 +103,7 @@ public class PriceQuery {
      * @throws IOException if an error occurs during the API request
      */
     public List<Price> getTodayPrices(String homeId) throws IOException {
-        JsonNode response = executeQuery(homeId);
+        JsonNode response = executeQuery(homeId, "HOURLY");
         JsonNode priceInfo = getPriceInfoNode(response, homeId);
 
         if (!priceInfo.has("today")) {
@@ -121,7 +121,7 @@ public class PriceQuery {
      * @throws IOException if an error occurs during the API request
      */
     public List<Price> getTomorrowPrices(String homeId) throws IOException {
-        JsonNode response = executeQuery(homeId);
+        JsonNode response = executeQuery(homeId, "HOURLY");
         JsonNode priceInfo = getPriceInfoNode(response, homeId);
 
         if (!priceInfo.has("tomorrow") || priceInfo.get("tomorrow").isNull()) {
@@ -131,8 +131,23 @@ public class PriceQuery {
         return convertToPriceList(priceInfo.get("tomorrow"));
     }
 
-    private JsonNode executeQuery(String homeId) throws IOException {
-        String formattedQuery = String.format(QUERY, homeId);
+    /** Retrieves today's quarter-hourly prices when Tibber has published them. */
+    public List<Price> getTodayQuarterHourlyPrices(String homeId) throws IOException {
+        JsonNode response = executeQuery(homeId, "QUARTER_HOURLY");
+        JsonNode info = getPriceInfoNode(response, homeId);
+        return info.has("today") ? convertToPriceList(info.get("today")) : new ArrayList<>();
+    }
+
+    /** Retrieves tomorrow's quarter-hourly prices when Tibber has published them. */
+    public List<Price> getTomorrowQuarterHourlyPrices(String homeId) throws IOException {
+        JsonNode response = executeQuery(homeId, "QUARTER_HOURLY");
+        JsonNode info = getPriceInfoNode(response, homeId);
+        return info.has("tomorrow") && !info.get("tomorrow").isNull()
+                ? convertToPriceList(info.get("tomorrow")) : new ArrayList<>();
+    }
+
+    private JsonNode executeQuery(String homeId, String resolution) throws IOException {
+        String formattedQuery = String.format(QUERY, homeId, resolution);
         return client.executeQuery(formattedQuery, new HashMap<>());
     }
 
