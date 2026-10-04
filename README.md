@@ -19,15 +19,15 @@ A Java library for interacting with the [Tibber API](https://developer.tibber.co
 ```xml
 <dependency>
     <groupId>io.github.mehdishahdoost</groupId>
-    <artifactId>tibber-java-connector</artifactId>
-    <version>1.0.0</version>
+    <artifactId>tibber-java-connector-lib</artifactId>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-implementation 'com.github:tibber-java-connector:1.0.0'
+implementation 'io.github.mehdishahdoost:tibber-java-connector-lib:1.0.1'
 ```
 
 ## Getting Started
